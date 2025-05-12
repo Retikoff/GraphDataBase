@@ -223,3 +223,19 @@ FROM  GameDeveloper AS GD
 	, Play FOR PATH 
 	, Game FOR PATH
 WHERE MATCH(SHORTEST_PATH(GD(-(Play)->Game)+)) AND GD.name = N'Станислав';
+
+
+SELECT @@SERVERNAME
+-- Сервер: DESKTOP-6PDCGCJ\SQLEXPRESS
+-- База данных: GamingInterests
+-- https://raw.githubusercontent.com/Retikoff/GraphDataBase/main/pics/GameDeveloper1.png
+SELECT GS.id AS IdFirst
+	  , GS.name AS First
+	  , CONCAT(N'GameDeveloper',GS.id) AS [First image name]
+	  , G.id AS IdSecond
+	  , G.name AS Second
+	  , CONCAT(N'Game',G.id) AS [Second image name]
+FROM dbo.GameStudio AS GS
+	, dbo.Develop AS D
+	, dbo.Game AS G
+WHERE MATCH(GS-(D)->G)
