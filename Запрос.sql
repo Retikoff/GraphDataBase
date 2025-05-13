@@ -225,17 +225,51 @@ FROM  GameDeveloper AS GD
 WHERE MATCH(SHORTEST_PATH(GD(-(Play)->Game)+)) AND GD.name = N'Станислав';
 
 
+
+-- PowerBI визуализация
+
 SELECT @@SERVERNAME
 -- Сервер: DESKTOP-6PDCGCJ\SQLEXPRESS
 -- База данных: GamingInterests
+-- https://raw.githubusercontent.com/Retikoff/GraphDataBase/main/pics/GameStudio1.png
 -- https://raw.githubusercontent.com/Retikoff/GraphDataBase/main/pics/GameDeveloper1.png
+-- https://raw.githubusercontent.com/Retikoff/GraphDataBase/main/pics/Game1.png
+
 SELECT GS.id AS IdFirst
 	  , GS.name AS First
-	  , CONCAT(N'GameDeveloper',GS.id) AS [First image name]
+	  , CONCAT(N'GameStudio',GS.id) AS [First image name]
 	  , G.id AS IdSecond
 	  , G.name AS Second
 	  , CONCAT(N'Game',G.id) AS [Second image name]
+	  , D.budget 
 FROM dbo.GameStudio AS GS
 	, dbo.Develop AS D
 	, dbo.Game AS G
 WHERE MATCH(GS-(D)->G)
+
+-- Сервер: DESKTOP-6PDCGCJ\SQLEXPRESS
+-- База данных: GamingInterests
+SELECT GD.id AS IdFirst
+	  , GD.name AS First
+	  , CONCAT(N'GameDeveloper',GD.id) AS [First image name]
+	  , G.id AS IdSecond
+	  , G.name AS Second
+	  , CONCAT(N'Game',G.id) AS [Second image name]
+FROM dbo.GameDeveloper AS GD
+	, dbo.Play AS P
+	, dbo.Game AS G
+WHERE MATCH(GD-(P)->G)
+
+-- Сервер: DESKTOP-6PDCGCJ\SQLEXPRESS
+-- База данных: GamingInterests
+SELECT GD.id AS IdFirst
+	  , GD.name AS First
+	  , CONCAT(N'GameDeveloper',GD.id) AS [First image name]
+	  , GS.id AS IdSecond
+	  , GS.name AS Second
+	  , CONCAT(N'GameStudio',GS.id) AS [Second image name]
+	  , W.position
+FROM dbo.GameDeveloper AS GD
+	, dbo.WorkIn AS W
+	, dbo.GameStudio AS GS
+WHERE MATCH(GD-(W)->GS)
